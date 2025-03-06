@@ -10,6 +10,9 @@ import UIKit
 //App Reviews Purposes:
 import StoreKit
 
+//Adding Core Data Library;
+import CoreData
+
 //Importing GoogleMobile Ads Library;
 import GoogleMobileAds
 
@@ -254,9 +257,29 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
     
     @objc func navigateFourthVController(){
         
-        if let thirdVC = storyboard?.instantiateViewController(identifier:"FourthVController"){
+        if let fourthController = storyboard?.instantiateViewController(identifier:"FourthVController")as? FourthVController {
             
-            navigationController?.pushViewController(thirdVC, animated: true)
+            //Sending data to the FourthVController..
+            //Sending just the total Per Person;
+            //fourthController.splitReceivedData = "$\(totalPerPersonString)"
+            
+            //TESTING, Core Data Testing;
+            CoreDataManager.shared.saveData(splitPersonData: "$\(totalPerPersonString)")
+            
+            navigationController?.pushViewController(fourthController, animated: true)
+            
+            
+            //TEsTING*, Small Delay to ensure Core Data writes the data
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+//                
+//                self.navigationController?.pushViewController(fourthController, animated: true)
+//                
+//            }
+            
+            //navigationController?.pushViewController(fourthController, animated: true)
+            //
+            
+            
         }
         
     }
