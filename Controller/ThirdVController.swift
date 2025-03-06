@@ -242,7 +242,22 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
             //Since the user has not bought it before, show all Ads;
             showingBannerAds()
         }
+        
+        //Creating a bar button item with the Title of the 3rd View Controller;
+        let thirdVController = UIBarButtonItem(title: "Split Tabs", style: .plain, target: self, action: #selector(navigateFourthVController))
+        
+        //Adding the navigation bar to the top right corner.
+        self.navigationItem.rightBarButtonItem = thirdVController
          
+        
+    }
+    
+    @objc func navigateFourthVController(){
+        
+        if let thirdVC = storyboard?.instantiateViewController(identifier:"FourthVController"){
+            
+            navigationController?.pushViewController(thirdVC, animated: true)
+        }
         
     }
    

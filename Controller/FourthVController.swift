@@ -7,12 +7,70 @@
 
 import UIKit
 
-class FourthVController: UIViewController {
+//Google Ads Library;
+import GoogleMobileAds
 
-    override func viewDidLoad() {
+class FourthVController: UIViewController, UITableViewDataSource, UITableViewDelegate
+{
+    @IBOutlet weak var dataTableView: UITableView!
+    
+    //Testing Fake Data for testing purposes on the TableView;
+    let fruits = ["Apple", "Pinneapple", "Banana"]
+    let prices = [0.99, 1.23, 3.44]
+        
+    //Background UIImage View;
+    let mainBackgroundImage = UIImageView()
+    
+    func setttingBackgroundImage()
+    {
+        dataTableView.delegate = self
+        dataTableView.dataSource = self
+        
+        //Adding this image to the Parent View;
+        view.addSubview(mainBackgroundImage)
+        
+        //Using No-AutoLayout
+        mainBackgroundImage.translatesAutoresizingMaskIntoConstraints = false
+        mainBackgroundImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        mainBackgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        mainBackgroundImage.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        mainBackgroundImage.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        //Loading up background image;
+        mainBackgroundImage.image = UIImage(named: "BaseBackground")
+        
+        //Setting image to filled the screen;
+        mainBackgroundImage.contentMode = .scaleAspectFill
+        view.sendSubviewToBack(mainBackgroundImage)
+        
+    }
+
+    override func viewDidLoad() 
+    {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        //Calling function to the set the UI Background;
+        setttingBackgroundImage()
+    }
+    
+    //How many rows there would be in my TableView;
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        //Just return the array of the
+        return fruits.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell 
+    {
+        //Identifier for the Table Cell in the Table View: cell
+        let cell = dataTableView.dequeueReusableCell(withIdentifier: "cell")
+        
+        //Assigning array names to the cell: FAKE DATA, TESTING:
+         cell?.textLabel?.text = fruits[indexPath.row]
+         cell?.detailTextLabel?.text = "\(prices[indexPath.row])"
+        
+        return cell!
     }
     
 

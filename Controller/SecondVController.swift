@@ -717,7 +717,6 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         groupOfPeopleTextField.attributedPlaceholder = groupOfPeoplePlaceHolder
         customTipAmount.attributedPlaceholder = customTipPlacerHolder
 
-        //Hidding Navigation Controller Back Arrow Button;
         //Check if the user previously bought the app;
         if isPurchased(){
             
