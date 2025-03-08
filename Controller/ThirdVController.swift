@@ -230,6 +230,9 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
         self.labelTotalPerPerson.text = "$\(totalPerPersonString)"
         self.labelGrantTotal.text = "$\(grantTotalBillString)"
         
+        //Assigning Data to our Core Data Persistance Container
+        CoreDataManager.shared.saveData(splitTitle: "Your Share (includes tip) 💵💡", splitPersonData: "$\(totalPerPersonString)")
+        
         //Hiding Navigation Controller Back Arrow Button..;
         self.navigationItem.hidesBackButton = true
         
@@ -246,43 +249,43 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
             showingBannerAds()
         }
         
-        //Creating a bar button item with the Title of the 3rd View Controller;
-        let thirdVController = UIBarButtonItem(title: "Split Tabs", style: .plain, target: self, action: #selector(navigateFourthVController))
-        
-        //Adding the navigation bar to the top right corner.
-        self.navigationItem.rightBarButtonItem = thirdVController
+//        //Creating a bar button item with the Title of the 3rd View Controller;
+//        let thirdVController = UIBarButtonItem(title: "Split Tabs", style: .plain, target: self, action: #selector(navigateFourthVController))
+//        
+//        //Adding the navigation bar to the top right corner.
+//        self.navigationItem.rightBarButtonItem = thirdVController
          
         
     }
     
-    @objc func navigateFourthVController(){
-        
-        if let fourthController = storyboard?.instantiateViewController(identifier:"FourthVController")as? FourthVController {
-            
-            //Sending data to the FourthVController..
-            //Sending just the total Per Person;
-            //fourthController.splitReceivedData = "$\(totalPerPersonString)"
-            
-            //TESTING, Core Data Testing;
-            CoreDataManager.shared.saveData(splitPersonData: "$\(totalPerPersonString)")
-            
-            navigationController?.pushViewController(fourthController, animated: true)
-            
-            
-            //TEsTING*, Small Delay to ensure Core Data writes the data
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
-//                
-//                self.navigationController?.pushViewController(fourthController, animated: true)
-//                
-//            }
-            
-            //navigationController?.pushViewController(fourthController, animated: true)
-            //
-            
-            
-        }
-        
-    }
+//    @objc func navigateFourthVController(){
+//        
+//        if let fourthController = storyboard?.instantiateViewController(identifier:"FourthVController")as? FourthVController {
+//            
+//            //Sending data to the FourthVController..
+//            //Sending just the total Per Person;
+//            //fourthController.splitReceivedData = "$\(totalPerPersonString)"
+//            
+//            //TESTING, Core Data Testing;
+//            CoreDataManager.shared.saveData(splitPersonData: "$\(totalPerPersonString)")
+//            
+//            navigationController?.pushViewController(fourthController, animated: true)
+//            
+//            
+//            //TEsTING*, Small Delay to ensure Core Data writes the data
+////            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+////                
+////                self.navigationController?.pushViewController(fourthController, animated: true)
+////                
+////            }
+//            
+//            //navigationController?.pushViewController(fourthController, animated: true)
+//            //
+//            
+//            
+//        }
+//        
+//    }
    
 
 }

@@ -741,6 +741,43 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         let request = GADRequest()
         interstitial.load(request)
         
+        //TESTING;
+        //Creating a bar button item with a Title View;
+        //This Button would take to the FourhtViewController with our UITableView;
+        let secondVControllerr = UIBarButtonItem(title: "Previous Splits", style: .plain, target: self, action: #selector(navigateFourthVController))
+        
+        //Adding the navigation bar to the top right corner.
+        self.navigationItem.rightBarButtonItem = secondVControllerr
+        
+    }
+    
+    @objc func navigateFourthVController(){
+        
+        if let fourthController = storyboard?.instantiateViewController(identifier:"FourthVController")as? FourthVController {
+            
+            //Sending data to the FourthVController..
+            //Sending just the total Per Person;
+            //fourthController.splitReceivedData = "$\(totalPerPersonString)"
+            
+            //TESTING, Core Data Testing;
+            //CoreDataManager.shared.saveData(splitPersonData: "$\(totalPerPersonString)")
+            
+            navigationController?.pushViewController(fourthController, animated: true)
+            
+            
+            //TEsTING*, Small Delay to ensure Core Data writes the data
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+//
+//                self.navigationController?.pushViewController(fourthController, animated: true)
+//
+//            }
+            
+            //navigationController?.pushViewController(fourthController, animated: true)
+            //
+            
+            
+        }
+        
     }
     
 }

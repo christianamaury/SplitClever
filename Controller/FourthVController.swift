@@ -19,6 +19,7 @@ class FourthVController: UIViewController, UITableViewDataSource, UITableViewDel
     
     //Testing Fake Data for testing purposes on the TableView;
     let fruits = ["Apple", "Pinneapple", "Banana"]
+    let yourPortion = ["Your Split (includes tip) 💵💡"]
     let prices = [0.99, 1.23, 3.44]
     
     //Variable to receive Data from the ThirdView Controller
@@ -36,9 +37,6 @@ class FourthVController: UIViewController, UITableViewDataSource, UITableViewDel
     
     func setttingBackgroundImage()
     {
-        dataTableView.delegate = self
-        dataTableView.dataSource = self
-        
         //Adding this image to the Parent View;
         view.addSubview(mainBackgroundImage)
         
@@ -61,6 +59,13 @@ class FourthVController: UIViewController, UITableViewDataSource, UITableViewDel
     override func viewDidLoad() 
     {
         super.viewDidLoad()
+        
+        dataTableView.delegate = self
+        dataTableView.dataSource = self
+        dataTableView.isEditing = true
+        
+        //TESTING; Styling;
+        dataTableView.layer.cornerRadius = 5
         
         //TESTING: Core Datat;
         savedSplitBillsData = CoreDataManager.shared.fetchData()
@@ -97,7 +102,7 @@ class FourthVController: UIViewController, UITableViewDataSource, UITableViewDel
         //Getting Saved Item Data;
         let savedItem = savedSplitBillsData[indexPath.row]
         
-        cell?.textLabel?.text = savedItem.stringAttribute
+        cell?.textLabel?.text = savedItem.splitTitle
         cell?.detailTextLabel?.text = savedItem.stringAttribute
         
         //TEtING;
@@ -106,43 +111,74 @@ class FourthVController: UIViewController, UITableViewDataSource, UITableViewDel
         return cell!
     }
     
-//    // MARK: - Saves new tabs per Person into Core Data
-//    func saveData(splitPersonData: String) {
-//        
-//        let newSplitPersonData = SplitEntity(context: context)
-//        newSplitPersonData.stringAttribute = splitPersonData
-//        
-//        do{
-//            //Saving to Core Data
-//            try context.save()
-//        }
-//        
-//        catch{
-//            print("❌ Error saving: \(error)")
-//        }
-//        
-//        //Reloading
-//        fetchData()
-//        
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool 
+    {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        
+        //Enables swipe to be delete
+        return .delete
+       
+    }
+////    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath){
+        
+        if editingStyle == .delete {
+            
+            //Calling our Deletion Function;
+            deleteData(at: indexPath)
+        }
+    }
+    
+//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+//    {
+//        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, completionHandler) in
+//               
+//               // Call the delete function
+//               self.deleteData(at: indexPath)
+//               
+//             //Notify the system that the action was performed
+//               completionHandler(true)
+//           }
+////            // ✅ Allows tap to delete instead of full swipe
+////            let config = UISwipeActionsConfiguration(actions: [deleteAction])
+////            config.performsFirstActionWithFullSwipe = false
+////        
+////            return config
+//             return UISwipeActionsConfiguration(actions: [deleteAction])
 //    }
     
-//    // MARK: - Fetchig Data
-//    func fetchData(){
-//        
-//        let request: NSFetchRequest<SplitEntity> = SplitEntity.fetchRequest()
-//        
-//        do{
-//            savedSplitBillsData = try context.fetch(request)
-//            dataTableView.reloadData()
-//            
-//        }
-//        
-//        catch{
-//            print ("❌ Error fetching data: \(error)")
-//        }
-//    }
-//    
-
+    // MARK: - Deleting Data;
+    func deleteData(at indexPath: IndexPath)
+    {
+        let itemToBeDelete = savedSplitBillsData[indexPath.row]
+        
+        //Removing from Core Data;
+        CoreDataManager.shared.deleteData(object: itemToBeDelete)
+        
+        //Removing from the Array;
+        savedSplitBillsData.remove(at: indexPath.row)
+        
+        //Deleting the row from the TablewView with an animation
+        //.fade
+        dataTableView.deleteRows(at: [indexPath], with: .automatic)
+        
+        //TESTING;
+        //dataTableView.reloadData()
+        
+        //TESTING:
+  // ✅ Reload the table properly
+//            dataTableView.performBatchUpdates {
+//                dataTableView.deleteRows(at: [indexPath], with: .fade)
+//            } completion: { _ in
+//                 // ✅ Fetch fresh data after deletion
+//                self.savedSplitBillsData = CoreDataManager.shared.fetchData()
+//                self.dataTableView.reloadData()
+//            }
+    }
+   
     /*
     // MARK: - Navigation
 

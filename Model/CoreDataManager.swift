@@ -18,19 +18,15 @@ class CoreDataManager {
     //Private init so I can prevent multiple Instances;
     private init() {}
     
-    //Array to store Fecth Data Objects
-    
-//    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {return}
-//    let context = appDelegate.persistentContainer.viewContext
-    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     // MARK: - Saving new Data into Core Data
-    func saveData(splitPersonData: String){
+    func saveData(splitTitle: String, splitPersonData: String){
                 let newSplitPersonData = SplitEntity(context: context)
                 
                 //Assigning data to the Core Object ;
                 newSplitPersonData.stringAttribute = splitPersonData
+                newSplitPersonData.splitTitle = splitTitle
                 
                 do{
                     //Handling any potential errors; Saving actual Data;
@@ -58,11 +54,27 @@ class CoreDataManager {
         }
         
         catch{
-            print("❌ Error saving \(error)")
+            print("❌ Error Fetching Data \(error)")
         }
         
         return results
         
+    }
+    
+    // MARK: - Deleting Data, Core Data
+    func deleteData(object: NSManagedObject){
+        
+        //Deleting from Core Data;
+        context.delete(object)
+        
+        do{
+            //Saving Deleting Changes;
+            try context.save()
+        }
+        
+        catch{
+            print ("❌ Error Deleting: \(error)")
+        }
     }
       
     
