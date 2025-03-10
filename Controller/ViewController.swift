@@ -6,8 +6,10 @@
 //
 
 import UIKit
+
 //StoreKit Library for the Purchases Events;
 import StoreKit
+
 //Library for UserNotifications purposes;
 import UserNotifications
 
@@ -38,11 +40,12 @@ class ViewController: UIViewController, SKPaymentTransactionObserver, GADBannerV
     @IBOutlet weak var removeAdsLabel: UIButton!
     @IBOutlet weak var restorePurchasesLabel: UIButton!
     
-    //..Checking if a Purchase did took place before.;
+    //Checking if a Purchase did took place before.;
     public func isPurchased() -> Bool {
         let purchasesStatus = userDefaultsReference.bool(forKey: productID)
         
-        if purchasesStatus {
+        if purchasesStatus 
+        {
             print("Previously Purchases it.")
             return true
         }
@@ -53,47 +56,49 @@ class ViewController: UIViewController, SKPaymentTransactionObserver, GADBannerV
         }
     }
     
-    func removingAllAds () {
+    func removingAllAds () 
+    {
         //Setting varieble to True;
         self.userDefaultsReference.set(true, forKey: productID)
         
     }
     
     //Tells the delegate an ad request failed
-    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
-        
+    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) 
+    {
         //If there's an request failed, go ahead & hide the banner..
         banner.isHidden = true
 
         //If the user already purchased the item to remove
-        if isPurchased(){
-            
+        if isPurchased()
+        {
             //If the user already removed all Ads;
             banner.isHidden = true
         }
-        
     }
     
     //Tells the delegate an ad request loaded an Ad.
     func adViewDidReceiveAd(_ bannerView: GADBannerView) 
     {
-        if isPurchased(){
-            
+        if isPurchased()
+        {
             //If isPurchased function return value is True, then the user already removed the ads
             banner.isHidden = true
         }
         
-        else{
-            
+        else
+        {
             //User hasn't purchased the item to remove all Ads, show Ads;
             banner.isHidden = false
         }
     }
     
     //Showing the Ads;
-    func showingBannerAds(){
+    func showingBannerAds()
+    {
         let removeAllAdsPurchase = self.userDefaultsReference.bool(forKey: productID)
-        if(removeAllAdsPurchase){
+        if(removeAllAdsPurchase)
+        {
             
             //If its true, remove All Ads;
             banner.isHidden = true
@@ -127,12 +132,10 @@ class ViewController: UIViewController, SKPaymentTransactionObserver, GADBannerV
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction])
     {
         //Checking each transactions
-        for transaction in transactions{
-            if transaction.transactionState == .purchased{
-                
-                //User Payment Successful :)
-                print("Transaction Successful")
-                
+        for transaction in transactions
+        {
+            if transaction.transactionState == .purchased
+            {
                 //Removing AllAds;
                 removingAllAds()
                 
@@ -148,12 +151,14 @@ class ViewController: UIViewController, SKPaymentTransactionObserver, GADBannerV
                 //Once the transaction has been completed, we would need to end the process.
                 SKPaymentQueue.default().finishTransaction(transaction)
             }
-            else if transaction.transactionState == .failed {
+            else if transaction.transactionState == .failed 
+            {
                 
                 //If its not nil..
                 if let error = transaction.error{
                     let errorDescription = error.localizedDescription
-                    //User Payment Failed :(
+                    
+                    //User Payment Failed..
                     print("Transaction Failed due to error \(errorDescription)")
                 }
                 
@@ -161,7 +166,9 @@ class ViewController: UIViewController, SKPaymentTransactionObserver, GADBannerV
                 SKPaymentQueue.default().finishTransaction(transaction)
                 
             }
-            else if transaction.transactionState == .restored {
+            
+            else if transaction.transactionState == .restored
+            {
                 
                 //Alert Message: Restore Message;
                 Alert.showAlertBox(on: self, with: "Your purchase has been restored ✅", message: "Enjoy our app without no ads 😄")
@@ -179,18 +186,15 @@ class ViewController: UIViewController, SKPaymentTransactionObserver, GADBannerV
                 //Terminating Transaction Queue;
                 SKPaymentQueue.default().finishTransaction(transaction)
             }
-            
-        
         }
-        
-        
     }
     
     //Restore Purchases;
-    func restorePurchases(){
+    func restorePurchases()
+    {
+        
         //This would restore all previous purchases for the user;
         SKPaymentQueue.default().restoreCompletedTransactions()
-     
     }
  
     //Checking for User permissions;
@@ -206,7 +210,8 @@ class ViewController: UIViewController, SKPaymentTransactionObserver, GADBannerV
                 
             case .notDetermined:
                 notificationsCenter.requestAuthorization(options: [.alert, .sound]){ didAllow, error in
-                    if didAllow {
+                    if didAllow 
+                    {
                         self.dispatchNotification()
                     }
                 }
@@ -298,7 +303,8 @@ class ViewController: UIViewController, SKPaymentTransactionObserver, GADBannerV
         buyAppNoAds()
     }
     
-    @IBAction func restoreAllPurchasesButton(_ sender: Any) {
+    @IBAction func restoreAllPurchasesButton(_ sender: Any) 
+    {
         
         //Restore Purchases Process:
          restorePurchases()
@@ -313,27 +319,31 @@ class ViewController: UIViewController, SKPaymentTransactionObserver, GADBannerV
         //Calling function to the set the UI Background;
         setMainbackground()
                 
-        //Checking for User Permissions: Local Push Notifications..
+        //Checking for User Permissions: Local Push Notifications;
         checkUserPermissions()
         
         //Assign ourselves to the Delegate Method:
         SKPaymentQueue.default().add(self)
         
         //Check if the user previously bought the app;
-        if isPurchased(){
+        if isPurchased()
+        {
             
             //Removing All Ads from the App;
             removingAllAds()
         }
-        else{
-            //Since the user has not bought it before, show all Ads;
+        
+        else
+        {
+            
+            //Since the user has not bought it before, show all Ads..
             showingBannerAds()
         }
         
         //Hiding the Navigation Back Arrow from the Navigation Controller
         self.navigationItem.hidesBackButton = true
         
-        //Initial State: Hidden if there's no Ads to Show
+        //Google Banner Initilization;
         banner.isHidden = true
         banner.delegate = self
         banner.adUnitID = "ca-app-pub-3187572158588519/8245251092"

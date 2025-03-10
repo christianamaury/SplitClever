@@ -13,27 +13,97 @@ import CoreData
 //Google Ads Library;
 import GoogleMobileAds
 
-class FourthVController: UIViewController, UITableViewDataSource, UITableViewDelegate
+class FourthVController: UIViewController, UITableViewDataSource, UITableViewDelegate, GADBannerViewDelegate
 {
     @IBOutlet weak var dataTableView: UITableView!
+    @IBOutlet weak var banner: GADBannerView!
     
-    //Testing Fake Data for testing purposes on the TableView;
-    let fruits = ["Apple", "Pinneapple", "Banana"]
-    let yourPortion = ["Your Split (includes tip) 💵💡"]
-    let prices = [0.99, 1.23, 3.44]
+    //Variable for the Randomizer Class;
+    var desiredRandomNumber: Int = 2
     
-    //Variable to receive Data from the ThirdView Controller
-    var splitReceivedData: String?
+    //Data Reference from the ViewController;
+    let dataReference = ViewController()
     
-    //..Array to store fetched Core Data Objects;
+    //Product ID: "SplitCleverNoAds" - No Ads on the application.
+    let productID: String = "SplitCleverNoAds"
+
+    //Array to store fetched Core Data Object;
     var savedSplitBillsData: [SplitEntity] = []
-    
-    //Getting Core Data Context from our App Delegate;
-    //let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
-        
+   
     //Background UIImage View;
     let mainBackgroundImage = UIImageView()
+    
+    //Tells the delegate an ad request loaded an Ad.
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) 
+    {
+       banner.isHidden = false
+        
+        if(isPurchased())
+        {
+            banner.isHidden = true
+        }
+        
+        else
+        {
+            banner.isHidden = false
+        }
+    }
+    
+    //Tells the delegate an Ad Request Failed
+    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) 
+    {
+        banner.isHidden = true
+        
+        if(isPurchased())
+        {
+            banner.isHidden = true
+        }
+    }
+    
+    // If the application has been bought before;
+     func isPurchased() -> Bool 
+    {
+        let purchasesStatus = dataReference.userDefaultsReference.bool(forKey: productID)
+        if purchasesStatus 
+        {
+            //..Whether Shows Ads or Not;
+            print("Previously Purchased")
+            return true
+        }
+        
+        else
+        {
+            print("Never Purchased")
+            return false
+        }
+    }
+    
+    func showingBannerAds() 
+    {
+        let removeAllAdsPurchase = dataReference.userDefaultsReference.bool(forKey: productID)
+        if(removeAllAdsPurchase)
+        {
+            //If its true, remove all Ads
+            banner.isHidden = true
+        }
+        
+        else
+        {
+            banner.isHidden = false
+        }
+    }
+    
+    func removingAllAds()
+    {
+        dataReference.userDefaultsReference.set(true, forKey: productID)
+    }
+    
+    //Create/Load another secondary interstial Ads after the 1st one has been displayed;
+    func createAd() -> GADInterstitial {
+        let inter = GADInterstitial(adUnitID: "ca-app-pub-3187572158588519/9010186782")
+        inter.load(GADRequest())
+        return inter
+    }
     
     func setttingBackgroundImage()
     {
@@ -47,7 +117,7 @@ class FourthVController: UIViewController, UITableViewDataSource, UITableViewDel
         mainBackgroundImage.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         mainBackgroundImage.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
-        //Loading up background image;
+        //Loading up UI Background Image;
         mainBackgroundImage.image = UIImage(named: "BaseBackground")
         
         //Setting image to filled the screen;
@@ -60,33 +130,63 @@ class FourthVController: UIViewController, UITableViewDataSource, UITableViewDel
     {
         super.viewDidLoad()
         
+        //Calling function to the set the UI Background;
+        setttingBackgroundImage()
+        
+        //Check if the user previously bought the app;
+        if isPurchased()
+        {
+            //Removing All Ads from the App;
+            removingAllAds()
+        }
+        
+        else
+        {
+            //Since the user has not bought it before, show all Ads;
+            showingBannerAds()
+        }
+        
+        //GoogleMobile Ads Banner Initial State: Hidden if there's no Ads to be display
+        banner.isHidden = true
+        banner.delegate = self
+        banner.adUnitID = "ca-app-pub-3187572158588519/8245251092"
+        banner.adSize = kGADAdSizeSmartBannerPortrait
+        banner.rootViewController = self
+        banner.load(GADRequest())
+        
         dataTableView.delegate = self
         dataTableView.dataSource = self
         dataTableView.isEditing = true
         
-        //TESTING; Styling;
+        //Setitng the Back arrow on the Navigation Controller color to White;
+        navigationController?.navigationBar.tintColor = .white
+        
+        //Setting the UITablew View to White Color
+        dataTableView.backgroundColor = .white
+        
+        //Setting a Custom Corner Radius and shadowOpacity to the UITable View
         dataTableView.layer.cornerRadius = 5
+        dataTableView.layer.shadowOpacity = 0.2
         
-        //TESTING: Core Datat;
+        //Fetching Core Data Mode
         savedSplitBillsData = CoreDataManager.shared.fetchData()
+        
+        //If there's no Data in the Persistance Container, display a message for the user
+        if savedSplitBillsData.isEmpty 
+        {
+            Alert.showAlertBox(on: self, with: "No history yet!", message: "Time to add your first dinner split 🍽️")
+        }
+        else {return}
+        
+        //Reloading fetched Data;
         dataTableView.reloadData()
-        
-        //saveData(splitPersonData: splitReceivedData!)
-
-        // Do any additional setup after loading the view.
-        
-        //Calling function to the set the UI Background;
-        setttingBackgroundImage()
+      
     }
     
     //How many rows there would be in my TableView;
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //Just return the array of the
-        //return fruits.count
-        
-        //Using the actual Core Data Array
-        //return savedSplitBillsData.count
-        
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int 
+    {
+        //Returning the our array total elements (CoreData)
         return savedSplitBillsData.count
     }
     
@@ -95,18 +195,18 @@ class FourthVController: UIViewController, UITableViewDataSource, UITableViewDel
         //Identifier for the Table Cell in the Table View: cell
         let cell = dataTableView.dequeueReusableCell(withIdentifier: "cell")
         
-        //Assigning array names to the cell: FAKE DATA, TESTING:
-//         cell?.textLabel?.text = fruits[indexPath.row]
-//         cell?.detailTextLabel?.text = "\(prices[indexPath.row])"
+        cell?.layer.borderWidth = 0.5
         
         //Getting Saved Item Data;
         let savedItem = savedSplitBillsData[indexPath.row]
         
+        //Assigning entitiy saved variables to the Cell Texts;
+        //Also setting Black as the Text Color and white for the Cell Background;
+        cell?.backgroundColor = .white
+        cell?.textLabel?.textColor = .black
         cell?.textLabel?.text = savedItem.splitTitle
+        cell?.detailTextLabel?.textColor = .black
         cell?.detailTextLabel?.text = savedItem.stringAttribute
-        
-        //TEtING;
-        //dataTableView.reloadData()
         
         return cell!
     }
@@ -116,72 +216,40 @@ class FourthVController: UIViewController, UITableViewDataSource, UITableViewDel
         return true
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle 
+    {
         //Enables swipe to be delete
         return .delete
-       
     }
-////    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath){
-        
-        if editingStyle == .delete {
-            
+
+    //Method to Delete a Cell;
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
+    {
+        if editingStyle == .delete 
+        {
             //Calling our Deletion Function;
             deleteData(at: indexPath)
         }
     }
-    
-//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
-//    {
-//        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, completionHandler) in
-//               
-//               // Call the delete function
-//               self.deleteData(at: indexPath)
-//               
-//             //Notify the system that the action was performed
-//               completionHandler(true)
-//           }
-////            // ✅ Allows tap to delete instead of full swipe
-////            let config = UISwipeActionsConfiguration(actions: [deleteAction])
-////            config.performsFirstActionWithFullSwipe = false
-////        
-////            return config
-//             return UISwipeActionsConfiguration(actions: [deleteAction])
-//    }
     
     // MARK: - Deleting Data;
     func deleteData(at indexPath: IndexPath)
     {
         let itemToBeDelete = savedSplitBillsData[indexPath.row]
         
-        //Removing from Core Data;
+        //Removing Data from Core Data;
         CoreDataManager.shared.deleteData(object: itemToBeDelete)
         
-        //Removing from the Array;
+        //Removing Data from our Array variable;
         savedSplitBillsData.remove(at: indexPath.row)
         
-        //Deleting the row from the TablewView with an animation
-        //.fade
+        //Deleting the row from the TablewView with: .automatic effect
+        //There's another effect called: .fade
         dataTableView.deleteRows(at: [indexPath], with: .automatic)
-        
-        //TESTING;
-        //dataTableView.reloadData()
-        
-        //TESTING:
-  // ✅ Reload the table properly
-//            dataTableView.performBatchUpdates {
-//                dataTableView.deleteRows(at: [indexPath], with: .fade)
-//            } completion: { _ in
-//                 // ✅ Fetch fresh data after deletion
-//                self.savedSplitBillsData = CoreDataManager.shared.fetchData()
-//                self.dataTableView.reloadData()
-//            }
     }
    
     /*
     // MARK: - Navigation
-
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.

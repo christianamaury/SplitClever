@@ -54,7 +54,6 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
     var tenPercentageVar: Bool = false
     var fiftenPercentageVar: Bool = false
     
-    
     //Split Bill Results..;
     var splitBillResults: Int = 0
     
@@ -83,14 +82,12 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
     @IBAction func fifteenPercentageButton(_ sender: UIButton)
     {
         fifteenPercentageFunction()
-        
     }
     
     //25% IBAction Button..
     @IBAction func twentyFivePercentageButton(_ sender: UIButton)
     {
         twentyFivePercentageFunction()
-        
     }
     
     //10% IBAction Button..
@@ -107,6 +104,7 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         
         //Using No-AutoLayout
         mainBackgroundImage.translatesAutoresizingMaskIntoConstraints = false
+        
         //Top of our ImageView is pin to the Top of the Screen;
         mainBackgroundImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         mainBackgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -192,7 +190,6 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             }
             else
             {
-                
                 //Decimal isn't greater than the second integer value, rounded it up;
                 grantTotalBill = Double(round(100 * grantTotalBill) / 100)
             }
@@ -208,7 +205,6 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         }
         else 
         {
-            
             Alert.showAlertBox(on: self, with: "Sorry, we're missing some required information❗️", message: "Please make sure to enter all the required information ✅")
         }
     }
@@ -237,7 +233,6 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             }
             else
             {
-                
                 //Decimal isn't greater than the second integer value, rounded it up;
                 tipPerPerson = Double(round(100 * tipPerPerson) / 100)
             }
@@ -275,17 +270,17 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             }
             else
             {
-                
                 //Decimal isn't greater than the second integer value, rounded it up;
                 tabPerPerson = Double(round(100 * tabPerPerson) / 100)
             }
             
             //If Statemeent For GrantTotal;
-            if decimalGrantTotalBill > 0.99 {
+            if decimalGrantTotalBill > 0.99 
+            {
                 //If the deciumal is greater than the second integer value, stays the same value, nothing won't change.
             }
-            else{
-                
+            else
+            {
                 //Decimal isn't greater than the second integer value, rounded it up;
                 grantTotalBill = Double(round(100 * grantTotalBill) / 100)
             }
@@ -309,7 +304,6 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
     {
         if(billAmountTextField.text != "" && groupOfPeopleTextField.text != "")
         {
-            
             //Assigning the Bill Amount entered by the user;
             billAmountTextFieldEntered = Double(billAmountTextField.text!)!
             
@@ -328,7 +322,8 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             {
                 //If the deciumal is greater than the second integer value, stays the same value, nothing won't change.
             }
-            else{
+            else
+            {
                 
                 //Decimal isn't greater than the second integer value, rounded it up;
                 tipPerPerson = Double(round(100 * tipPerPerson) / 100)
@@ -352,6 +347,7 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             {
                 //Value stays the same;
             }
+            
             else
             {
                 //Decimal isn't greater than the second integer value, rounded it up;
@@ -363,17 +359,19 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             {
                 //If the deciumal is greater than the second integer value, stays the same value, nothing won't change.
             }
+            
             else
             {
-                
                 //Decimal isn't greater than the second integer value, rounded it up;
                 tabPerPerson = Double(round(100 * tabPerPerson) / 100)
             }
             
             //If Statement for GrantTotalBill Variable;
-            if decimalGrantTotalBill > 0.99 {
+            if decimalGrantTotalBill > 0.99 
+            {
                 //If the deciumal is greater than the second integer value, stays the same value, nothing won't change.
             }
+            
             else
             {
                 //Decimal isn't greater than the second integer value, rounded it up;
@@ -389,6 +387,7 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             splitBillVerifier = true
          
         }
+        
         else
         {
             Alert.showAlertBox(on: self, with: "Sorry, we're missing some required information❗️", message: "Please make sure to enter all the required information ✅")
@@ -396,14 +395,13 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         
     }
     
-    func customerCustomTip(){
-        
-            //Assigning the Bill Amount entered by the user;
+    func customerCustomTip()
+    {
+        //Assigning the Bill Amount entered by the user;
         billAmountTextFieldEntered = Double(billAmountTextField.text!)!
             
             //Assigning the group of People entered by the user;
         groupOfPeolpleTextFieldEntered = Double(groupOfPeopleTextField.text!)!
-        
         
         tabPerPerson = Double(billAmountTextFieldEntered) / Double(groupOfPeolpleTextFieldEntered)
         
@@ -411,10 +409,11 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         //$14.29 * 10 = $1.43
         tipPerPerson = Double(customTipAmount.text!)!
         
-        //Dividir entre las personas del Party;
+        //Divide data between the group of people;
         tipPerPerson = tipPerPerson / groupOfPeolpleTextFieldEntered
         
-        if decimalTipPerPerson > 0.99 {
+        if decimalTipPerPerson > 0.99 
+        {
             //If the deciumal is greater than the second integer value, stays the same value, nothing won't change.
         }
         else
@@ -442,6 +441,7 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         {
             //Value stays the same;
         }
+        
         else
         {
             //Decimal isn't greater than the second integer value, rounded it up;
@@ -453,9 +453,9 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         {
             //If the deciumal is greater than the second integer value, stays the same value, nothing won't change.
         }
+        
         else
         {
-            
             //Decimal isn't greater than the second integer value, rounded it up;
             tabPerPerson = Double(round(100 * tabPerPerson) / 100)
         }
@@ -465,13 +465,12 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         {
             //If the deciumal is greater than the second integer value, stays the same value, nothing won't change.
         }
+        
         else
         {
-            
             //Decimal isn't greater than the second integer value, rounded it up;
             grantTotalBill = Double(round(100 * grantTotalBill) / 100)
         }
-
 
     }
 
@@ -489,7 +488,6 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
     //IBAction Button to the ThirdView Controller
     @IBAction func sliptBillButton(_ sender: UIButton) 
     {
-        
         if(billAmountTextField.text != "" && groupOfPeopleTextField.text != "")
         {
             
@@ -497,17 +495,17 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             {
                 splitBillVerifier = true
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1){
-                    
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1)
+                {
                     //Hide Percentages Buttons;
                     //Hidding all IBOutlets Buttons and TextField;
                     self.tenButton.isHidden = true
                     self.fifteenButton.isHidden = true
                     self.twentyFiveButton.isHidden = true
                 }
+                
                 //Custom Tip Function which does the custom math for the Customer;
                 customerCustomTip()
-                
             }
             
             else if(billAmountTextField.text == "" && groupOfPeopleTextField.text == "" && splitBillVerifier == false)
@@ -517,7 +515,6 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             }
             
         }
-        
             if(splitBillVerifier == true)
             {
                 //Showing Interestial Ads;
@@ -525,13 +522,13 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
                 
                 //Performing Segue:
                 performSegue(withIdentifier: "ThirdVControllerIdentifier", sender: self)
-                
             }
-            else {
+        
+            else 
+            {
                 Alert.showAlertBox(on: self, with: "Sorry, we're missing some required information❗️", message: "Please make sure to enter all the required information ✅")
                 return
             }
-        
     }
     
     //Third View Controller Identifier: ThirdVControllerIdentifier
@@ -547,30 +544,30 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             thirdViewController.tipPerPersonString = String(tipPerPerson)
             thirdViewController.totalPerPersonString  = String(totalPerPerson)
             thirdViewController.grantTotalBillString = String(grantTotalBill)
-
         }
-        else{
-            
+        
+        else
+        {
             return
         }
     }
     
-
     // MARK: - Random Interestial Ads;
     func randomInterestialAds() 
     {
-        
         desiredNumber = 1
         //Initial Default: (0..4) - Unfortunately it was taking too long to display an ad.
         var randomNumber = Int.random(in: 0...2)
+        
         //In order to show the Ads, the number needs to be: 2
         if(desiredNumber == randomNumber)
         {
-            if(isPurchased()){
-              
+            if(isPurchased())
+            {
                 //Do not display any Ads. Remove All Interestial Ads.
                 print("User already removed the Ads")
             }
+            
             else
             {
             //Showing Interstial Ads to the user, User haven't removed all Ads;
@@ -585,12 +582,11 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             desiredNumber = 1
         }
         
-        
     }
    
     //Tells the delegate an ad request loaded an Ad.
-    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-        
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) 
+    {
        banner.isHidden = false
 
         if(isPurchased())
@@ -603,41 +599,40 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             banner.isHidden = false
         }
        
-        
     }
     
     //Tells the delegate an ad request failed
-    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
-        
+    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) 
+    {
         banner.isHidden = true
         
         if(isPurchased())
         {
             banner.isHidden = true
-         
         }
-        
     }
     
     // If the application has been bought before;
-     func isPurchased() -> Bool {
-         let purchasesStatus = dataReference.userDefaultsReference.bool(forKey: productID)
-        if purchasesStatus {
-            
+     func isPurchased() -> Bool 
+    {
+        let purchasesStatus = dataReference.userDefaultsReference.bool(forKey: productID)
+        if purchasesStatus 
+        {
             //..Whether Shows Ads or Not;
             print("Previously Purchased")
             return true
         }
         
-        else{
+        else
+        {
             print("Never Purchased")
             return false
         }
         
     }
     
-    func showingBannerAds() {
-        
+    func showingBannerAds() 
+    {
         let removeAllAdsPurchase = dataReference.userDefaultsReference.bool(forKey: productID)
 
         if(removeAllAdsPurchase)
@@ -645,37 +640,39 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
             //If its true, remove all Ads
             banner.isHidden = true
         }
-        else {
+        else 
+        {
             banner.isHidden = false
-       
         }
     }
-    func removingAllAds(){
-    
+    func removingAllAds()
+    {
         dataReference.userDefaultsReference.set(true, forKey: productID)
-   
     }
     
     //Create/Load another secondary interstial Ads after the 1st one has been displayed;
-    func createAd() -> GADInterstitial {
+    func createAd() -> GADInterstitial 
+    {
         let inter = GADInterstitial(adUnitID: "ca-app-pub-3187572158588519/9010186782")
         inter.load(GADRequest())
         return inter
     }
     
     //Showing Interestial Ads if there's one already available;
-    func showInterstitial () {
-        if(interstitial.isReady){
+    func showInterstitial () 
+    {
+        if(interstitial.isReady)
+        {
             interstitial.present(fromRootViewController: self)
             //Equal to create/load function below
             interstitial = createAd()
         }
     }
     
-    func appUseIntructions(){
+    func appUseIntructions()
+    {
         Alert.showAlertBox(on: self, with: "How to use Split Clever 🧾😄", message: "Make sure to enter your bill amount and the number of people in your party. Once this information has been entered, you can select your desired tip percentage or rather enter your prefered custom tip amount.                   (As an example: 3.00 dollars) ✅")
     }
-    
     
     override func viewDidLoad()
     {
@@ -698,7 +695,6 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         customTipAmount.delegate = self
         groupOfPeopleTextField.delegate = self
         
-        
         //Custom RGB Color: *A41C24* for the Place Holder;
         let red: CGFloat = 164.0 / 255.0
         let green: CGFloat = 28.0 / 255.0
@@ -718,17 +714,18 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         customTipAmount.attributedPlaceholder = customTipPlacerHolder
 
         //Check if the user previously bought the app;
-        if isPurchased(){
-            
+        if isPurchased()
+        {
             //Removing All Ads from the App;
             removingAllAds()
         }
-        else{
+        else
+        {
             //Since the user has not bought it before, show all Ads;
             showingBannerAds()
         }
         
-        //Initial State: Hidden if there's no Ads to the Show;
+        //Google Banner Initilization;
         banner.isHidden = true
         banner.delegate = self
         banner.adUnitID = "ca-app-pub-3187572158588519/8245251092"
@@ -741,7 +738,6 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         let request = GADRequest()
         interstitial.load(request)
         
-        //TESTING;
         //Creating a bar button item with a Title View;
         //This Button would take to the FourhtViewController with our UITableView;
         let secondVControllerr = UIBarButtonItem(title: "Previous Splits", style: .plain, target: self, action: #selector(navigateFourthVController))
@@ -751,43 +747,31 @@ class SecondVController: UIViewController, GADBannerViewDelegate, GADInterstitia
         
     }
     
-    @objc func navigateFourthVController(){
-        
-        if let fourthController = storyboard?.instantiateViewController(identifier:"FourthVController")as? FourthVController {
-            
-            //Sending data to the FourthVController..
-            //Sending just the total Per Person;
-            //fourthController.splitReceivedData = "$\(totalPerPersonString)"
-            
-            //TESTING, Core Data Testing;
-            //CoreDataManager.shared.saveData(splitPersonData: "$\(totalPerPersonString)")
-            
+    //Runs every time the screen appears as an example user coming back from the 3rd View Controller..
+    override func viewWillAppear(_ animated: Bool) 
+    {
+        //Resetting navigation bar item again;
+        //Setting main color of the navigation bar (Once user comes back from the 3rd View Controller)
+        navigationController?.navigationBar.tintColor = UIColor(red: 164/255, green: 28/255, blue: 36/255, alpha: 1.0)
+    }
+    
+    @objc func navigateFourthVController()
+    {
+        if let fourthController = storyboard?.instantiateViewController(identifier:"FourthVController")as? FourthVController 
+        {
+            //Navigating to the Fourth View Controller;
             navigationController?.pushViewController(fourthController, animated: true)
-            
-            
-            //TEsTING*, Small Delay to ensure Core Data writes the data
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
-//
-//                self.navigationController?.pushViewController(fourthController, animated: true)
-//
-//            }
-            
-            //navigationController?.pushViewController(fourthController, animated: true)
-            //
-            
-            
         }
-        
     }
     
 }
 
 //Extension to the Third ViewController: UITextFieldDelegate
-extension SecondVController: UITextFieldDelegate{
-    
+extension SecondVController: UITextFieldDelegate
+{
     //It's called whenever the return key has been pressed, return NO to ignore;
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool 
+    {
         billAmountTextField.resignFirstResponder()
         groupOfPeopleTextField.resignFirstResponder()
         customTipAmount.resignFirstResponder()
@@ -795,13 +779,14 @@ extension SecondVController: UITextFieldDelegate{
         return true
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) 
+    {
         self.view.endEditing(true)
     }
     
     //Only these characters are allow to be enter on these input text fields;
-    func textField(_ billAmountTextField: UITextField,_ groupOfPeopleTextField: UITextField,_ customTipAmount:UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
+    func textField(_ billAmountTextField: UITextField,_ groupOfPeopleTextField: UITextField,_ customTipAmount:UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool 
+    {
         //Allowed Characters to input on the TextField
         let allowedCharacters = "1234567890."
         let characterSet = CharacterSet(charactersIn: allowedCharacters)
@@ -814,9 +799,6 @@ extension SecondVController: UITextFieldDelegate{
                 return false
             }
         }
-        
         return true
     }
-    
-
 }

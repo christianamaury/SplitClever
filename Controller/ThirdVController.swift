@@ -23,6 +23,7 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
 {
     //GoogleAds Banner Reference..
     @IBOutlet weak var banner: GADBannerView!
+    
     //Interestial Ads, Google Ads
     var interstitial: GADInterstitial!
     
@@ -46,94 +47,89 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
     var totalPerPersonString: String = " "
     var grantTotalBillString: String = " "
  
-
     //Google Ads Test Units:
     //iOS Test Ads Unit: ca-app-pub-3940256099942544/2934735716
     //iOS Test Interestiads Ads: ca-app-pub-3940256099942544/4411468910
     
     // MARK: - Random Interestial Ads;
-    func randomInterestialAds() {
-        
+    func randomInterestialAds() 
+    {
         //Decided to permantently just the ads to the user;
-        if(isPurchased()) {
-          
+        if(isPurchased()) 
+        {
             //Do not display any Ads. Remove All Interestial Ads.
             print("User already removed the Ads")
-            
         }
-        else{
-            
+        else
+        {
         //Showing Interstial Ads to the user, User haven't removed all Ads;
         showInterstitial()
-            
         }
-
     }
    
     //Tells the delegate an ad request loaded an Ad.
-    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-        
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) 
+    {
        banner.isHidden = false
         
         if(isPurchased())
         {
             banner.isHidden = true
-            
         }
+        
         else
         { 
             banner.isHidden = false
         }
-       
     }
     
     //Tells the delegate an ad request failed
-    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
-        
+    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) 
+    {
         banner.isHidden = true
         
         if(isPurchased())
         {
             banner.isHidden = true
         }
-        
     }
     
     // If the application has been bought before;
-     func isPurchased() -> Bool {
-         let purchasesStatus = dataReference.userDefaultsReference.bool(forKey: productID)
-        if purchasesStatus {
-            
+     func isPurchased() -> Bool 
+    {
+        let purchasesStatus = dataReference.userDefaultsReference.bool(forKey: productID)
+        if purchasesStatus 
+        {
             //..Whether Shows Ads or Not;
-            
             print("Previously Purchased")
             return true
-        
         }
         
-        else{
+        else
+        {
             print("Never Purchased")
             return false
         }
         
     }
     
-    func showingBannerAds() {
-        
+    func showingBannerAds() 
+    {
         let removeAllAdsPurchase = dataReference.userDefaultsReference.bool(forKey: productID)
-
         if(removeAllAdsPurchase)
         {
             //If its true, remove all Ads
             banner.isHidden = true
         }
-        else {
-            
+        
+        else
+        {
             banner.isHidden = false
         }
     }
-    func removingAllAds(){
     
+    func removingAllAds()
+    {
         dataReference.userDefaultsReference.set(true, forKey: productID)
     }
     
@@ -145,8 +141,10 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
     }
     
     //Showing Interestial Ads if there's one already available;
-    func showInterstitial () {
-        if(interstitial.isReady){
+    func showInterstitial()
+    {
+        if(interstitial.isReady)
+        {
             interstitial.present(fromRootViewController: self)
             
             //Equal to create/load function below
@@ -158,7 +156,8 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
     @IBAction func rateUsButton(_ sender: UIButton) 
     {
         //Since its an optional, lets unwrap it..
-        guard let scene = view.window?.windowScene else{
+        guard let scene = view.window?.windowScene else
+        {
             print("No scene available right at the moment..")
             return
         }
@@ -180,8 +179,8 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
     }
 
     //Setting actual UI background;
-    func setMainbackground() {
-        
+    func setMainbackground() 
+    {
         //Adding this specific View to the Parent View;
         view.addSubview(mainBackgroundImage)
         
@@ -205,8 +204,21 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
     {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+    
+        //Check if the user previously bought the app;
+        if isPurchased()
+        {
+            //Removing All Ads from the App;
+            removingAllAds()
+        }
         
-        //..GoogleMobile Ads Initial State: Hidden if there's no Ads to the Show
+        else
+        {
+            //Since the user has not bought it before, show all Ads;
+            showingBannerAds()
+        }
+        
+        //Google Banner Initilization;
         banner.isHidden = true
         banner.delegate = self
         banner.adUnitID = "ca-app-pub-3187572158588519/8245251092"
@@ -216,7 +228,6 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
         
         //Requesting-Intertestial Ads:
         //Testing: ca-app-pub-3940256099942544/4411468910
-        //Real: ca-app-pub-3187572158588519/9010186782
         interstitial = GADInterstitial(adUnitID: "ca-app-pub-3187572158588519/9010186782")
         let request = GADRequest()
         interstitial.load(request)
@@ -224,7 +235,7 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
         //Calling function to the set the UI Background;
         setMainbackground()
         
-        //..Assigning transferred string values to our labels.
+        //Assigning transferred string values to our labels;
         self.labelTabPerPerson.text = "$\(tabPerPersonString)"
         self.labelTipPerPerson.text = "$\(tipPerPersonString)"
         self.labelTotalPerPerson.text = "$\(totalPerPersonString)"
@@ -248,44 +259,5 @@ class ThirdVController: UIViewController, GADInterstitialDelegate, GADBannerView
             //Since the user has not bought it before, show all Ads;
             showingBannerAds()
         }
-        
-//        //Creating a bar button item with the Title of the 3rd View Controller;
-//        let thirdVController = UIBarButtonItem(title: "Split Tabs", style: .plain, target: self, action: #selector(navigateFourthVController))
-//        
-//        //Adding the navigation bar to the top right corner.
-//        self.navigationItem.rightBarButtonItem = thirdVController
-         
-        
     }
-    
-//    @objc func navigateFourthVController(){
-//        
-//        if let fourthController = storyboard?.instantiateViewController(identifier:"FourthVController")as? FourthVController {
-//            
-//            //Sending data to the FourthVController..
-//            //Sending just the total Per Person;
-//            //fourthController.splitReceivedData = "$\(totalPerPersonString)"
-//            
-//            //TESTING, Core Data Testing;
-//            CoreDataManager.shared.saveData(splitPersonData: "$\(totalPerPersonString)")
-//            
-//            navigationController?.pushViewController(fourthController, animated: true)
-//            
-//            
-//            //TEsTING*, Small Delay to ensure Core Data writes the data
-////            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
-////                
-////                self.navigationController?.pushViewController(fourthController, animated: true)
-////                
-////            }
-//            
-//            //navigationController?.pushViewController(fourthController, animated: true)
-//            //
-//            
-//            
-//        }
-//        
-//    }
-   
-
 }
